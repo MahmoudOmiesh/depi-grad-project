@@ -1,0 +1,78 @@
+model Property {
+  id   Int    @id @default(autoincrement())
+  slug String @unique
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownerName  String
+  ownerPhone String @db.VarChar(20)
+
+  propertyTypeId Int          @unique
+  propertyType   PropertyType @relation(fields: [propertyTypeId], references: [id])
+
+  title       String
+  description String
+  location    String
+  area        Int
+  media       Media[]
+
+  purpose PropertyPurpose
+  price   Int
+
+  // only one of these will be present depending on the purpose
+  rentDetails RentDetails?
+  sellDetails SellDetails?
+
+  @@index([userId])
+  @@map("property")
+}
+
+model RentDetails {
+  id Int @id @default(autoincrement())
+
+  propertyId Int      @unique
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  rentFrequency RentFrequency
+  deposit       Int
+  insurance     Int
+
+  @@index([propertyId])
+  @@map("rent_details")
+}
+
+model SellDetails {
+  id Int @id @default(autoincrement())
+
+  propertyId Int      @unique
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  paymentMethod PaymentMethod
+  // if payment method is INSTALLMENT, then down payment is required
+  downPayment   Int?
+
+  @@index([propertyId])
+  @@map("sell_details")
+}
+
+enum PropertyPurpose {
+  SELL
+  RENT
+}
+
+enum PaymentMethod {
+  CASH
+  INSTALLMENT
+  BOTH
+}
+
+enum RentFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}

@@ -1,0 +1,110 @@
+model PropertyType {
+  id Int @id @default(autoincrement())
+
+  property Property?
+
+  type              PropertyTypeEnum
+  // only one of these will be present depending on the type
+  apartmentDetails  ApartmentDetails?
+  villaDetails      VillaDetails?
+  commercialDetails CommercialDetails?
+  landDetails       LandDetails?
+
+  @@map("property_type")
+}
+
+model ApartmentDetails {
+  id Int @id @default(autoincrement())
+
+  propertyTypeId Int          @unique
+  propertyType   PropertyType @relation(fields: [propertyTypeId], references: [id])
+
+  subtype   ApartmentSubtype
+  bedrooms  Int
+  bathrooms Int
+  furnished Boolean
+  level     Int?
+
+  @@index([propertyTypeId])
+  @@map("apartment_details")
+}
+
+model VillaDetails {
+  id Int @id @default(autoincrement())
+
+  propertyTypeId Int          @unique
+  propertyType   PropertyType @relation(fields: [propertyTypeId], references: [id])
+
+  subtype   VillaSubtype
+  bedrooms  Int
+  bathrooms Int
+  furnished Boolean
+
+  @@index([propertyTypeId])
+  @@map("villa_details")
+}
+
+model CommercialDetails {
+  id Int @id @default(autoincrement())
+
+  propertyTypeId Int          @unique
+  propertyType   PropertyType @relation(fields: [propertyTypeId], references: [id])
+
+  subtype CommercialSubtype
+
+  @@index([propertyTypeId])
+  @@map("commercial_details")
+}
+
+model LandDetails {
+  id Int @id @default(autoincrement())
+
+  propertyTypeId Int          @unique
+  propertyType   PropertyType @relation(fields: [propertyTypeId], references: [id])
+
+  subtype LandSubtype
+
+  @@index([propertyTypeId])
+  @@map("land_details")
+}
+
+enum PropertyTypeEnum {
+  APARTMENT
+  VILLA
+  COMMERCIAL
+  LAND
+}
+
+enum ApartmentSubtype {
+  APARTMENT
+  DUPLEX
+  PENTHOUSE
+  STUDIO
+  HOTEL_APARTMENT
+  ROOF
+}
+
+enum VillaSubtype {
+  STAND_ALONE_VILLA
+  TOWN_HOUSE
+  TWIN_HOUSE
+}
+
+enum CommercialSubtype {
+  OFFICE
+  CLINIC
+  PHARMACY
+  FACTORY
+  GARAGE
+  WAREHOUSE
+  RESTAURANT
+  OTHER
+}
+
+enum LandSubtype {
+  RESIDENTIAL
+  COMMERCIAL
+  INDUSTRIAL
+  AGRICULTURAL
+  ANY
+}
