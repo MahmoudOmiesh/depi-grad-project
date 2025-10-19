@@ -16,18 +16,26 @@ model Property {
 
   title       String
   description String
-  location    String
-  area        Int
-  media       Media[]
 
-  purpose PropertyPurpose
-  price   Int
+  location  String
+  city      String
+  region    String
+  latitude  Float?
+  longitude Float?
 
+  area Int
+
+  media Media[]
+
+  amenities Amenity[]
+
+  purpose     PropertyPurpose
   // only one of these will be present depending on the purpose
   rentDetails RentDetails?
   sellDetails SellDetails?
 
   @@index([userId])
+  @@index([slug])
   @@map("property")
 }
 
@@ -38,8 +46,9 @@ model RentDetails {
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   rentFrequency RentFrequency
-  deposit       Int
-  insurance     Int
+  price         Decimal       @db.Decimal(12, 2)
+  deposit       Decimal       @db.Decimal(12, 2)
+  insurance     Decimal       @db.Decimal(12, 2)
 
   @@index([propertyId])
   @@map("rent_details")
@@ -52,8 +61,9 @@ model SellDetails {
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   paymentMethod PaymentMethod
+  price         Decimal       @db.Decimal(12, 2)
   // if payment method is INSTALLMENT, then down payment is required
-  downPayment   Int?
+  downPayment   Decimal?      @db.Decimal(12, 2)
 
   @@index([propertyId])
   @@map("sell_details")
@@ -75,4 +85,23 @@ enum RentFrequency {
   WEEKLY
   MONTHLY
   YEARLY
+}
+
+enum Amenity {
+  BALCONY
+  BUILT_IN_KITCHEN_APPLIANCES
+  PRIVATE_GARDEN
+  CENTRAL_AC
+  SECURITY
+  COVERED_PARKING
+  MAIDS_ROOM
+  PETS_ALLOWED
+  POOL
+  ELECTRICITY_METER
+  WATER_METER
+  NATURAL_GAS
+  LANDLINE
+  ELEVATOR
+  AIR_CONDITIONING
+  STORAGE
 }
