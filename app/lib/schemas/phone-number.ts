@@ -1,5 +1,5 @@
 import z from "zod";
-import { isValidNumber, parsePhoneNumberWithError } from "libphonenumber-js";
+import { parsePhoneNumberWithError } from "libphonenumber-js";
 
 export const PhoneNumberSchema = z
   .string("Phone number is required")
