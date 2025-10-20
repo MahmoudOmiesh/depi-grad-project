@@ -19,6 +19,7 @@ export default tseslint.config(
     ],
     rules: {
       "@typescript-eslint/array-type": "off",
+      "react/react-in-jsx-scope": "off",
       "@typescript-eslint/consistent-type-definitions": "off",
       "@typescript-eslint/consistent-type-imports": [
         "warn",
@@ -44,5 +45,5 @@ export default tseslint.config(
         projectService: true,
       },
     },
-  }
+  },
 );

@@ -8,7 +8,7 @@ import {
 import z from "zod";
 
 export const ProperyTypeNameSchema = z.enum(
-  Object.values(PrismaPropertyTypeName)
+  Object.values(PrismaPropertyTypeName),
 );
 export const ApartmentSubtypeSchema = z.enum(Object.values(ApartmentSubtype));
 export const VillaSubtypeSchema = z.enum(Object.values(VillaSubtype));
@@ -50,7 +50,7 @@ export const PropertyTypeSchema = z
   .object({
     id: z.number("ID is required").positive("ID must be positive"),
   })
-  .and(
+  .extend(
     z.discriminatedUnion("name", [
       z.object({
         name: z.literal(PrismaPropertyTypeName.APARTMENT),
@@ -68,7 +68,7 @@ export const PropertyTypeSchema = z
         name: z.literal(PrismaPropertyTypeName.LAND),
         landDetails: LandDetailsSchema,
       }),
-    ])
+    ]),
   );
 
 export type PropertyTypeName = z.infer<typeof ProperyTypeNameSchema>;

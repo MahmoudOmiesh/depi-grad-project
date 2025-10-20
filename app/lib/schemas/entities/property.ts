@@ -1,5 +1,5 @@
 import z from "zod";
-import { PhoneNumberSchema } from "./phone-number";
+import { PhoneNumberSchema } from "../common/phone-number";
 import { PropertyTypeSchema } from "./property-type";
 import {
   PaymentMethod as PrismaPaymentMethod,
@@ -11,7 +11,7 @@ import { MediaSchema } from "./media";
 
 export const PropertyAmenitySchema = z.enum(Object.values(PrismaAmenity));
 export const PropertyPurposeSchema = z.enum(
-  Object.values(PrismaPropertyPurpose)
+  Object.values(PrismaPropertyPurpose),
 );
 export const PaymentMethodSchema = z.enum(Object.values(PrismaPaymentMethod));
 export const RentFrequencySchema = z.enum(Object.values(PrismaRentFrequency));
@@ -20,7 +20,7 @@ export const PropertySellDetailsSchema = z
   .object({
     price: z.number("Price is required").positive("Price must be positive"),
   })
-  .and(
+  .extend(
     z.discriminatedUnion("paymentMethod", [
       z.object({
         paymentMethod: z.literal(PrismaPaymentMethod.CASH),
@@ -37,7 +37,7 @@ export const PropertySellDetailsSchema = z
           .number("Down payment is required")
           .positive("Down payment must be positive"),
       }),
-    ])
+    ]),
   );
 
 export const PropertyRentDetailsSchema = z.object({
@@ -94,7 +94,7 @@ export const PropertySchema = z
 
     media: z.array(MediaSchema),
   })
-  .and(
+  .extend(
     z.discriminatedUnion("purpose", [
       z.object({
         purpose: z.literal(PrismaPropertyPurpose.SELL),
@@ -104,7 +104,7 @@ export const PropertySchema = z
         purpose: z.literal(PrismaPropertyPurpose.RENT),
         rentDetails: PropertyRentDetailsSchema,
       }),
-    ])
+    ]),
   );
 
 export type PropertyAmenity = z.infer<typeof PropertyAmenitySchema>;
