@@ -16,12 +16,10 @@ model Property {
 
   title       String
   description String
+  price       Decimal @db.Decimal(12, 2)
 
-  location  String
-  city      String
-  region    String
-  latitude  Float?
-  longitude Float?
+  governorate Governorate
+  city        String
 
   area Int
 
@@ -46,7 +44,6 @@ model RentDetails {
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   rentFrequency RentFrequency
-  price         Decimal       @db.Decimal(12, 2)
   deposit       Decimal       @db.Decimal(12, 2)
   insurance     Decimal       @db.Decimal(12, 2)
 
@@ -61,7 +58,6 @@ model SellDetails {
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   paymentMethod PaymentMethod
-  price         Decimal       @db.Decimal(12, 2)
   // if payment method is INSTALLMENT, then down payment is required
   downPayment   Decimal?      @db.Decimal(12, 2)
 
@@ -104,4 +100,34 @@ enum Amenity {
   ELEVATOR
   AIR_CONDITIONING
   STORAGE
+}
+
+enum Governorate {
+  Alexandria
+  Aswan
+  Asyut
+  Beheira
+  Beni_Suef
+  Cairo
+  Dakahlia
+  Damietta
+  Faiyum
+  Gharbia
+  Giza
+  Ismailia
+  Kafr_El_Sheikh
+  Luxor
+  Matrouh
+  Minya
+  Monufia
+  New_Valley
+  North_Sinai
+  Port_Said
+  Qalyubia
+  Qena
+  Red_Sea
+  Sharqia
+  Sohag
+  South_Sinai
+  Suez
 }

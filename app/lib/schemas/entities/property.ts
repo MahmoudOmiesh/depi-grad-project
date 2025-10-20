@@ -6,43 +6,36 @@ import {
   Amenity as PrismaAmenity,
   PropertyPurpose as PrismaPropertyPurpose,
   RentFrequency as PrismaRentFrequency,
+  Governorate as PrismaGovernorate,
 } from "@prisma/client";
 import { MediaSchema } from "./media";
 
-export const PropertyAmenitySchema = z.enum(Object.values(PrismaAmenity));
-export const PropertyPurposeSchema = z.enum(
-  Object.values(PrismaPropertyPurpose),
-);
-export const PaymentMethodSchema = z.enum(Object.values(PrismaPaymentMethod));
-export const RentFrequencySchema = z.enum(Object.values(PrismaRentFrequency));
+export const GovernorateSchema = z.enum(PrismaGovernorate);
+export const PropertyAmenitySchema = z.enum(PrismaAmenity);
+export const PropertyPurposeSchema = z.enum(PrismaPropertyPurpose);
+export const PaymentMethodSchema = z.enum(PrismaPaymentMethod);
+export const RentFrequencySchema = z.enum(PrismaRentFrequency);
 
-export const PropertySellDetailsSchema = z
-  .object({
-    price: z.number("Price is required").positive("Price must be positive"),
-  })
-  .extend(
-    z.discriminatedUnion("paymentMethod", [
-      z.object({
-        paymentMethod: z.literal(PrismaPaymentMethod.CASH),
-      }),
-      z.object({
-        paymentMethod: z.literal(PrismaPaymentMethod.INSTALLMENT),
-        downPayment: z
-          .number("Down payment is required")
-          .positive("Down payment must be positive"),
-      }),
-      z.object({
-        paymentMethod: z.literal(PrismaPaymentMethod.BOTH),
-        downPayment: z
-          .number("Down payment is required")
-          .positive("Down payment must be positive"),
-      }),
-    ]),
-  );
+export const PropertySellDetailsSchema = z.discriminatedUnion("paymentMethod", [
+  z.object({
+    paymentMethod: z.literal(PrismaPaymentMethod.CASH),
+  }),
+  z.object({
+    paymentMethod: z.literal(PrismaPaymentMethod.INSTALLMENT),
+    downPayment: z
+      .number("Down payment is required")
+      .positive("Down payment must be positive"),
+  }),
+  z.object({
+    paymentMethod: z.literal(PrismaPaymentMethod.BOTH),
+    downPayment: z
+      .number("Down payment is required")
+      .positive("Down payment must be positive"),
+  }),
+]);
 
 export const PropertyRentDetailsSchema = z.object({
   rentFrequency: RentFrequencySchema,
-  price: z.number("Price is required").positive("Price must be positive"),
   deposit: z.number("Deposit is required").positive("Deposit must be positive"),
   insurance: z
     .number("Insurance is required")
@@ -56,8 +49,8 @@ export const PropertySchema = z
 
     userId: z.string("User ID is required").min(1, "User ID is too short"),
 
-    createdAt: z.date("Created at is required"),
-    updatedAt: z.date("Updated at is required"),
+    createdAt: z.iso.datetime("Created at is required"),
+    updatedAt: z.iso.datetime("Updated at is required"),
 
     ownerName: z
       .string("Owner name is required")
@@ -70,20 +63,10 @@ export const PropertySchema = z
     description: z
       .string("Description is required")
       .min(1, "Description is too short"),
+    price: z.number("Price is required").positive("Price must be positive"),
 
-    location: z.string("Location is required").min(1, "Location is too short"),
-    region: z.string("Region is required").min(1, "Region is too short"),
+    governorate: GovernorateSchema,
     city: z.string("City is required").min(1, "City is too short"),
-    latitude: z
-      .number()
-      .min(-90, "Latitude must be between -90 and 90")
-      .max(90, "Latitude must be between -90 and 90")
-      .optional(),
-    longitude: z
-      .number()
-      .min(-180, "Longitude must be between -180 and 180")
-      .max(180, "Longitude must be between -180 and 180")
-      .optional(),
 
     area: z
       .number("Area is required")
@@ -94,7 +77,7 @@ export const PropertySchema = z
 
     media: z.array(MediaSchema),
   })
-  .extend(
+  .and(
     z.discriminatedUnion("purpose", [
       z.object({
         purpose: z.literal(PrismaPropertyPurpose.SELL),
@@ -107,6 +90,7 @@ export const PropertySchema = z
     ]),
   );
 
+export type Governorate = z.infer<typeof GovernorateSchema>;
 export type PropertyAmenity = z.infer<typeof PropertyAmenitySchema>;
 export type PropertyPurpose = z.infer<typeof PropertyPurposeSchema>;
 export type PropertySellDetails = z.infer<typeof PropertySellDetailsSchema>;

@@ -1,30 +1,31 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
+import { Hono } from "hono";
+import { validator } from "hono-openapi";
+import { PropertiesGetPageSchema } from "~/lib/schemas/queries/properties";
+import { db } from "~/server/db";
+import { tryCatch } from "~/lib/utils";
+import { paginate } from "../paginate";
 import { docs } from "../open-api";
 
-// Create the route definition
+export const propertiesRoute = new Hono().get(
+  "/",
+  docs.properties.getPage,
+  validator("query", PropertiesGetPageSchema),
+  async (c) => {
+    const query = c.req.valid("query");
 
-// Create the router and register the route
-export const propertiesRoute = new OpenAPIHono()
-  .openapi(docs.properties.get, async (c) => {
-    return c.json(
-      {
-        message: "hello",
-      },
-      200,
-    );
-  })
-  .openapi(docs.properties.getById, async (c) => {
-    return c.json(
-      {
-        property: "123",
-      },
-      200,
-    );
-  });
+    console.log("Query:", query);
 
-// TODO: Add more routes
-// get a property by id
-// create a property
-// update a property
-// delete a property
-// view user's properties (paginated)
+    const { data, error } = await tryCatch(
+      paginate({
+        input: query,
+        getPage: db.properties.queries.getPage,
+      }),
+    );
+
+    if (error) {
+      return c.json({ error: "Failed to get properties" }, 500);
+    }
+
+    return c.json(data, 200);
+  },
+);

@@ -1,72 +1,100 @@
-import { createRoute, z } from "@hono/zod-openapi";
+import { describeRoute, resolver } from "hono-openapi";
+import {
+  GovernorateSchema,
+  PropertyPurposeSchema,
+} from "~/lib/schemas/entities/property";
+import { ProperyTypeNameSchema } from "~/lib/schemas/entities/property-type";
+import { PropertiesGetPageResponseSchema } from "~/lib/schemas/queries/properties";
 
 export const _properties = {
-  get: createRoute({
-    method: "get",
-    path: "/",
-    tags: ["Properties"],
-    summary: "Get all properties",
-    description: "Retrieve a paginated list of properties",
-    request: {},
+  getPage: describeRoute({
+    description: "Get all properties",
+    parameters: [
+      {
+        in: "query",
+        name: "cursor",
+        schema: { type: "string" },
+        required: false,
+        description: "Cursor for pagination",
+      },
+      {
+        in: "query",
+        name: "pageSize",
+        schema: { type: "number" },
+        required: true,
+        description: "Number of items per page (must be non-negative)",
+      },
+      {
+        in: "query",
+        name: "title",
+        schema: { type: "string" },
+        required: false,
+        description: "Filter by property title",
+      },
+      {
+        in: "query",
+        name: "propertyTypes",
+        schema: {
+          type: "array",
+          items: {
+            type: "string",
+            enum: Object.values(ProperyTypeNameSchema.enum),
+          },
+        },
+        required: false,
+        description: "Filter by property type(s)",
+      },
+      {
+        in: "query",
+        name: "purpose",
+        schema: {
+          type: "string",
+          enum: Object.values(PropertyPurposeSchema.enum),
+        },
+        required: false,
+        description: "Filter by property purpose",
+      },
+      {
+        in: "query",
+        name: "minPrice",
+        schema: { type: "number", minimum: 0 },
+        required: false,
+        description: "Minimum price filter (must be positive)",
+      },
+      {
+        in: "query",
+        name: "maxPrice",
+        schema: { type: "number", minimum: 0 },
+        required: false,
+        description: "Maximum price filter (must be positive)",
+      },
+      {
+        in: "query",
+        name: "governorates",
+        schema: {
+          type: "array",
+          items: {
+            type: "string",
+            enum: Object.values(GovernorateSchema.enum),
+          },
+        },
+        required: false,
+        description: "Filter by governorate(s)",
+      },
+      {
+        in: "query",
+        name: "city",
+        schema: { type: "string" },
+        required: false,
+        description: "Filter by city",
+      },
+    ],
     responses: {
       200: {
-        description: "Successful response with paginated properties",
+        description: "Properties retrieved successfully",
         content: {
           "application/json": {
-            schema: z.object({
-              message: z.string(),
-            }),
-          },
-        },
-      },
-      400: {
-        description: "Bad request - invalid query parameters",
-        content: {
-          "application/json": {
-            schema: z.object({
-              error: z.string(),
-            }),
-          },
-        },
-      },
-    },
-  }),
-
-  getById: createRoute({
-    method: "get",
-    path: "/{id}",
-    tags: ["Properties"],
-    summary: "Get property by ID",
-    description: "Retrieve a property by its ID",
-    request: {
-      params: z.object({
-        id: z.string().openapi({
-          param: {
-            name: "id",
-            in: "path",
-          },
-          example: "123",
-        }),
-      }),
-    },
-    responses: {
-      200: {
-        description: "Successful response with property",
-        content: {
-          "application/json": {
-            schema: z.object({
-              property: z.string(),
-            }),
-          },
-        },
-      },
-      400: {
-        description: "Bad request - invalid query parameters",
-        content: {
-          "application/json": {
-            schema: z.object({
-              error: z.string(),
-            }),
+            schema: resolver(PropertiesGetPageResponseSchema),
           },
         },
       },

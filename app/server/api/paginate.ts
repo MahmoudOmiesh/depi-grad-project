@@ -34,13 +34,14 @@ export async function paginate<
     throw error;
   }
 
-  const hasNextPage = data.length > rest.pageSize;
+  const hasNextPage = data.length > input.pageSize && !!data.pop();
+
   const nextCursor = hasNextPage
     ? encodeCursor(data[data.length - 1].id)
     : null;
 
   return {
-    data,
+    data: data,
     nextCursor,
   };
 }

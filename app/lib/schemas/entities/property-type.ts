@@ -7,13 +7,11 @@ import {
 } from "@prisma/client";
 import z from "zod";
 
-export const ProperyTypeNameSchema = z.enum(
-  Object.values(PrismaPropertyTypeName),
-);
-export const ApartmentSubtypeSchema = z.enum(Object.values(ApartmentSubtype));
-export const VillaSubtypeSchema = z.enum(Object.values(VillaSubtype));
-export const CommercialSubtypeSchema = z.enum(Object.values(CommercialSubtype));
-export const LandSubtypeSchema = z.enum(Object.values(LandSubtype));
+export const ProperyTypeNameSchema = z.enum(PrismaPropertyTypeName);
+export const ApartmentSubtypeSchema = z.enum(ApartmentSubtype);
+export const VillaSubtypeSchema = z.enum(VillaSubtype);
+export const CommercialSubtypeSchema = z.enum(CommercialSubtype);
+export const LandSubtypeSchema = z.enum(LandSubtype);
 
 export const ApartmentDetailsSchema = z.object({
   subtype: ApartmentSubtypeSchema,
@@ -50,7 +48,7 @@ export const PropertyTypeSchema = z
   .object({
     id: z.number("ID is required").positive("ID must be positive"),
   })
-  .extend(
+  .and(
     z.discriminatedUnion("name", [
       z.object({
         name: z.literal(PrismaPropertyTypeName.APARTMENT),

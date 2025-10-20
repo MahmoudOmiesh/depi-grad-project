@@ -1,5 +1,5 @@
 import { _properties } from "./properties";
 
-export const data = {
+export const db = {
   properties: _properties,
 };

@@ -1,21 +1,28 @@
 import { createHonoServer } from "react-router-hono-server/node";
-import { propertiesRoute } from "./routes/properties";
-import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
+import { Hono } from "hono";
 
-export const app = new OpenAPIHono();
+export const app = new Hono();
 
-app.route("/api/properties", propertiesRoute);
+import { openAPIRouteHandler } from "hono-openapi";
+import { propertiesRoute } from "./routes/properties";
 
-app.doc("/api/doc", {
-  openapi: "3.0.0",
-  info: {
-    version: "1.0.0",
-    title: "Real Estate API",
-  },
-});
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const apiRoutes = app.basePath("/api").route("/properties", propertiesRoute);
 
-app.get("/api/docs", Scalar({ url: "/api/doc" }));
+app.get(
+  "api/openapi",
+  openAPIRouteHandler(app, {
+    documentation: {
+      info: {
+        title: "Real Estate API",
+        version: "1.0.0",
+      },
+    },
+  }),
+);
+
+app.get("/api/docs", Scalar({ url: "/api/openapi" }));
 
 export default createHonoServer({ app });
-export type ApiRoutes = typeof app;
+export type ApiRoutes = typeof apiRoutes;

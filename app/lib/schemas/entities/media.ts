@@ -11,8 +11,8 @@ export const MediaSchema = z.object({
   order: z.number("Order is required").nonnegative("Order can't be negative"),
   alt: z.string("Alt is required").min(1, "Alt is too short").optional(),
 
-  createdAt: z.date("Created at is required"),
-  updatedAt: z.date("Updated at is required"),
+  createdAt: z.iso.datetime("Created at is required"),
+  updatedAt: z.iso.datetime("Updated at is required"),
 });
 
 export type Media = z.infer<typeof MediaSchema>;
