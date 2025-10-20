@@ -2,6 +2,7 @@ import { describeRoute, resolver } from "hono-openapi";
 import {
   GovernorateSchema,
   PropertyPurposeSchema,
+  PropertySchema,
 } from "~/lib/schemas/entities/property";
 import { ProperyTypeNameSchema } from "~/lib/schemas/entities/property-type";
 import { PropertiesGetPageResponseSchema } from "~/lib/schemas/queries/properties";
@@ -95,6 +96,29 @@ export const _properties = {
         content: {
           "application/json": {
             schema: resolver(PropertiesGetPageResponseSchema),
+          },
+        },
+      },
+    },
+  }),
+
+  getById: describeRoute({
+    description: "Get a property by ID",
+    parameters: [
+      {
+        in: "path",
+        name: "id",
+        schema: { type: "number" },
+        required: true,
+        description: "Property ID",
+      },
+    ],
+    responses: {
+      200: {
+        description: "Property retrieved successfully",
+        content: {
+          "application/json": {
+            schema: resolver(PropertySchema),
           },
         },
       },

@@ -76,5 +76,35 @@ export const _properties = {
         },
       });
     },
+
+    getById: (id: number) => {
+      return db.property.findUnique({
+        where: {
+          id,
+        },
+        omit: {
+          propertyTypeId: true,
+        },
+        include: {
+          propertyType: true,
+          media: {
+            orderBy: {
+              order: "asc",
+            },
+          },
+          sellDetails: {
+            omit: {
+              propertyId: true,
+            },
+          },
+          rentDetails: {
+            omit: {
+              propertyId: true,
+            },
+          },
+          user: true,
+        },
+      });
+    },
   },
 };
