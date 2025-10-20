@@ -86,7 +86,14 @@ export const _properties = {
           propertyTypeId: true,
         },
         include: {
-          propertyType: true,
+          propertyType: {
+            include: {
+              apartmentDetails: true,
+              villaDetails: true,
+              commercialDetails: true,
+              landDetails: true,
+            },
+          },
           media: {
             orderBy: {
               order: "asc",

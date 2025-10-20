@@ -6,9 +6,13 @@ export const app = new Hono();
 
 import { openAPIRouteHandler } from "hono-openapi";
 import { propertiesRoute } from "./routes/properties";
+import { usersRoute } from "./routes/users";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const apiRoutes = app.basePath("/api").route("/properties", propertiesRoute);
+const apiRoutes = app
+  .basePath("/api")
+  .route("/properties", propertiesRoute)
+  .route("/me", usersRoute);
 
 app.get(
   "api/openapi",
