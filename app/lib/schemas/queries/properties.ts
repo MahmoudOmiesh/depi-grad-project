@@ -2,6 +2,8 @@ import z from "zod";
 import { PaginationSchema } from "../common/pagination";
 import {
   GovernorateSchema,
+  PropertyBaseSchema,
+  PropertyPurposeDetailsSchema,
   PropertyPurposeSchema,
   PropertySchema,
 } from "../entities/property";
@@ -33,8 +35,37 @@ export const PropertiesGetPageResponseSchema = z.object({
   nextCursor: z.string().optional(),
 });
 
+export const PropertyInsertSchema = PropertyBaseSchema.omit({
+  id: true,
+  slug: true,
+  userId: true,
+  createdAt: true,
+  updatedAt: true,
+  media: true,
+})
+  .and(PropertyPurposeDetailsSchema)
+  .and(
+    z.object({
+      mediaIds: z
+        .array(
+          z
+            .number("Media ID is required")
+            .positive("Media ID must be positive"),
+        )
+        .min(1, "Media IDs must be at least 1"),
+    }),
+  );
+
+export const PropertyUpdateSchema = PropertyInsertSchema.and(
+  z.object({
+    id: z.number("ID is required").positive("ID must be positive"),
+  }),
+);
+
 export type PropertiesFilters = z.infer<typeof PropertiesFiltersSchema>;
 export type PropertiesGetPage = z.infer<typeof PropertiesGetPageSchema>;
 export type PropertiesGetPageResponse = z.infer<
   typeof PropertiesGetPageResponseSchema
 >;
+export type PropertyInsert = z.infer<typeof PropertyInsertSchema>;
+export type PropertyUpdate = z.infer<typeof PropertyUpdateSchema>;

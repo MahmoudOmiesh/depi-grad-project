@@ -44,30 +44,24 @@ export const LandDetailsSchema = z.object({
   subtype: LandSubtypeSchema,
 });
 
-export const PropertyTypeSchema = z
-  .object({
-    id: z.number("ID is required").positive("ID must be positive"),
-  })
-  .and(
-    z.discriminatedUnion("name", [
-      z.object({
-        name: z.literal(PrismaPropertyTypeName.APARTMENT),
-        apartmentDetails: ApartmentDetailsSchema,
-      }),
-      z.object({
-        name: z.literal(PrismaPropertyTypeName.VILLA),
-        villaDetails: VillaDetailsSchema,
-      }),
-      z.object({
-        name: z.literal(PrismaPropertyTypeName.COMMERCIAL),
-        commercialDetails: CommercialDetailsSchema,
-      }),
-      z.object({
-        name: z.literal(PrismaPropertyTypeName.LAND),
-        landDetails: LandDetailsSchema,
-      }),
-    ]),
-  );
+export const PropertyTypeSchema = z.discriminatedUnion("name", [
+  z.object({
+    name: z.literal(PrismaPropertyTypeName.APARTMENT),
+    apartmentDetails: ApartmentDetailsSchema,
+  }),
+  z.object({
+    name: z.literal(PrismaPropertyTypeName.VILLA),
+    villaDetails: VillaDetailsSchema,
+  }),
+  z.object({
+    name: z.literal(PrismaPropertyTypeName.COMMERCIAL),
+    commercialDetails: CommercialDetailsSchema,
+  }),
+  z.object({
+    name: z.literal(PrismaPropertyTypeName.LAND),
+    landDetails: LandDetailsSchema,
+  }),
+]);
 
 export type PropertyTypeName = z.infer<typeof ProperyTypeNameSchema>;
 

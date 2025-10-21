@@ -57,10 +57,17 @@ export const _properties = {
           propertyTypeId: true,
         },
         include: {
-          propertyType: true,
+          propertyType: {
+            omit: {
+              id: true,
+            },
+          },
           media: {
             where: {
               isPrimary: true,
+            },
+            omit: {
+              propertyId: true,
             },
           },
           sellDetails: {
@@ -87,25 +94,53 @@ export const _properties = {
         },
         include: {
           propertyType: {
+            omit: {
+              id: true,
+            },
             include: {
-              apartmentDetails: true,
-              villaDetails: true,
-              commercialDetails: true,
-              landDetails: true,
+              apartmentDetails: {
+                omit: {
+                  id: true,
+                  propertyTypeId: true,
+                },
+              },
+              villaDetails: {
+                omit: {
+                  id: true,
+                  propertyTypeId: true,
+                },
+              },
+              commercialDetails: {
+                omit: {
+                  id: true,
+                  propertyTypeId: true,
+                },
+              },
+              landDetails: {
+                omit: {
+                  id: true,
+                  propertyTypeId: true,
+                },
+              },
             },
           },
           media: {
             orderBy: {
               order: "asc",
             },
+            omit: {
+              propertyId: true,
+            },
           },
           sellDetails: {
             omit: {
+              id: true,
               propertyId: true,
             },
           },
           rentDetails: {
             omit: {
+              id: true,
               propertyId: true,
             },
           },

@@ -31,6 +31,20 @@ export const _users = {
     },
   }),
 
+  createProperty: describeRoute({
+    description: "Create a property for the authenticated user",
+    responses: {
+      200: {
+        description: "Property created successfully",
+        content: {
+          "application/json": {
+            schema: resolver(z.object({ id: z.number() })),
+          },
+        },
+      },
+    },
+  }),
+
   deleteProperty: describeRoute({
     description: "Delete a property of the authenticated user",
     parameters: [

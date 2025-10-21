@@ -7,6 +7,7 @@ import { tryCatch } from "~/lib/utils";
 import { paginate } from "../paginate";
 import { db } from "~/server/db";
 import z from "zod";
+import { PropertyInsertSchema } from "~/lib/schemas/queries/properties";
 
 export const usersRoute = new Hono()
   .use(getUser)
@@ -28,6 +29,26 @@ export const usersRoute = new Hono()
 
       if (error) {
         return c.json({ error: "Failed to get properties" }, 500);
+      }
+
+      return c.json(data, 200);
+    },
+  )
+
+  .post(
+    "/properties",
+    docs.users.createProperty,
+    validator("json", PropertyInsertSchema),
+    async (c) => {
+      const user = c.get("user");
+      const body = c.req.valid("json");
+
+      const { data, error } = await tryCatch(
+        db.users.mutations.createProperty(user.id, body),
+      );
+
+      if (error) {
+        return c.json({ error: "Failed to create property" }, 500);
       }
 
       return c.json(data, 200);
