@@ -23,7 +23,7 @@ export const _users = {
           propertyType: true,
           media: {
             where: {
-              isPrimary: true,
+              order: 0,
             },
           },
           sellDetails: {

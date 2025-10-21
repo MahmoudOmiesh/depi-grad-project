@@ -64,7 +64,7 @@ export const _properties = {
           },
           media: {
             where: {
-              isPrimary: true,
+              order: 0,
             },
             omit: {
               propertyId: true,

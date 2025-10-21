@@ -7,12 +7,14 @@ export const app = new Hono();
 import { openAPIRouteHandler } from "hono-openapi";
 import { propertiesRoute } from "./routes/properties";
 import { usersRoute } from "./routes/users";
+import { mediaRoute } from "./routes/media";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const apiRoutes = app
   .basePath("/api")
   .route("/properties", propertiesRoute)
-  .route("/me", usersRoute);
+  .route("/me", usersRoute)
+  .route("/media", mediaRoute);
 
 app.get(
   "api/openapi",

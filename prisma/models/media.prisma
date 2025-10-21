@@ -5,15 +5,10 @@ model Media {
   url      String
   mimeType String
 
-  isPrimary Boolean @default(false)
-  order     Int     @default(0)
-  alt       String?
+  order Int @default(0)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  propertyId Int
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId Int?
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
   @@map("media")
