@@ -9,4 +9,6 @@ export default [
   route("/api/auth/*", "routes/api/auth.ts"),
 
   layout("routes/layout.tsx", [index("routes/home.tsx")]),
+
+  route("/add-property", "routes/add-property.tsx"),
 ] satisfies RouteConfig;

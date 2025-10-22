@@ -12,7 +12,7 @@ export function Header() {
   const isSignedIn = !!session?.user;
 
   return (
-    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 fixed inset-x-0 top-0 z-50 border-b px-6 py-3 backdrop-blur sm:px-8 sm:py-4">
+    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 fixed inset-x-0 top-0 z-50 border-b py-4 backdrop-blur">
       <MaxWidthWrapper className="flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <span className="hidden text-2xl font-bold sm:block">DEPI</span>
@@ -31,7 +31,7 @@ export function Header() {
                   photoUrl={session.user.image ?? ""}
                 />
                 <Button asChild>
-                  <Link to="/post">Add Your Property</Link>
+                  <Link to="/add-property">Add Your Property</Link>
                 </Button>
               </>
             ) : (

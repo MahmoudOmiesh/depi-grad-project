@@ -4,7 +4,7 @@ import {
   PropertyPurposeSchema,
   PropertySchema,
 } from "~/lib/schemas/entities/property";
-import { ProperyTypeNameSchema } from "~/lib/schemas/entities/property-type";
+import { PropertyTypeNames } from "~/lib/schemas/entities/property-type";
 import { PropertiesGetPageResponseSchema } from "~/lib/schemas/queries/properties";
 
 export const _properties = {
@@ -39,7 +39,7 @@ export const _properties = {
           type: "array",
           items: {
             type: "string",
-            enum: Object.values(ProperyTypeNameSchema.enum),
+            enum: PropertyTypeNames,
           },
         },
         required: false,

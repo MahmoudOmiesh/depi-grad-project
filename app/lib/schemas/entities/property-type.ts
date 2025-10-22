@@ -7,22 +7,41 @@ import {
 } from "@prisma/client";
 import z from "zod";
 
-export const ProperyTypeNameSchema = z.enum(PrismaPropertyTypeName);
-export const ApartmentSubtypeSchema = z.enum(ApartmentSubtype);
-export const VillaSubtypeSchema = z.enum(VillaSubtype);
-export const CommercialSubtypeSchema = z.enum(CommercialSubtype);
-export const LandSubtypeSchema = z.enum(LandSubtype);
+export const ProperyTypeNameSchema = z.enum(PrismaPropertyTypeName, {
+  error: "Please select a property type",
+});
+export const ApartmentSubtypeSchema = z.enum(ApartmentSubtype, {
+  error: "Please select an apartment subtype",
+});
+export const VillaSubtypeSchema = z.enum(VillaSubtype, {
+  error: "Please select a villa subtype",
+});
+export const CommercialSubtypeSchema = z.enum(CommercialSubtype, {
+  error: "Please select a commercial subtype",
+});
+export const LandSubtypeSchema = z.enum(LandSubtype, {
+  error: "Please select a land subtype",
+});
+
+export const PropertyTypeNames = Object.values(PrismaPropertyTypeName);
+export const ApartmentSubtypes = Object.values(ApartmentSubtype);
+export const VillaSubtypes = Object.values(VillaSubtype);
+export const CommercialSubtypes = Object.values(CommercialSubtype);
+export const LandSubtypes = Object.values(LandSubtype);
 
 export const ApartmentDetailsSchema = z.object({
   subtype: ApartmentSubtypeSchema,
   bedrooms: z
-    .number("Bedrooms is required")
-    .positive("Bedrooms must be positive"),
+    .number("Please enter the number of bedrooms")
+    .positive("Number of bedrooms must be positive"),
   bathrooms: z
-    .number("Bathrooms is required")
-    .positive("Bathrooms must be positive"),
+    .number("Please enter the number of bathrooms")
+    .positive("Number of bathrooms must be positive"),
   furnished: z.boolean("Furnished is required"),
-  level: z.number().positive("Level must be positive").optional(),
+  level: z
+    .number("Please enter the level")
+    .positive("Level must be positive")
+    .optional(),
 });
 
 export const VillaDetailsSchema = z.object({

@@ -7,12 +7,12 @@ import {
   PropertyPurposeSchema,
   PropertySchema,
 } from "../entities/property";
-import { ProperyTypeNameSchema } from "../entities/property-type";
+import { PropertyTypeSchema } from "../entities/property-type";
 import { stringOrArray } from "../common/string-or-array";
 
 export const PropertiesFiltersSchema = z.object({
   title: z.string("Title is required").optional(),
-  propertyTypes: stringOrArray(ProperyTypeNameSchema).optional(),
+  propertyTypes: stringOrArray(PropertyTypeSchema).optional(),
   purpose: PropertyPurposeSchema.optional(),
   minPrice: z.coerce
     .number("Min price is required")
