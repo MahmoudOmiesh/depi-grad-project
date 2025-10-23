@@ -10,11 +10,15 @@ import {
 } from "@prisma/client";
 import { MediaSchema } from "./media";
 
-export const GovernorateSchema = z.enum(PrismaGovernorate);
+export const GovernorateSchema = z.enum(PrismaGovernorate, {
+  error: "Please select a governorate",
+});
 export const PropertyAmenitySchema = z.enum(PrismaAmenity);
 export const PropertyPurposeSchema = z.enum(PrismaPropertyPurpose);
 export const PaymentMethodSchema = z.enum(PrismaPaymentMethod);
 export const RentFrequencySchema = z.enum(PrismaRentFrequency);
+
+export const Governorates = Object.values(PrismaGovernorate);
 
 export const PropertySellDetailsSchema = z.discriminatedUnion("paymentMethod", [
   z.object({
@@ -66,7 +70,8 @@ export const PropertyBaseSchema = z.object({
   area: z
     .number("Area is required")
     .positive("Area must be positive")
-    .min(10, "Area must be at least 10"),
+    .min(10, "Area must be at least 10")
+    .max(10000, "Area must be at most 10000"),
   amenities: z.array(PropertyAmenitySchema),
   media: z.array(MediaSchema),
 });

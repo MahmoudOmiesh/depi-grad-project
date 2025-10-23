@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { Step2Schema, type StepComponentProps } from "./main";
+import { Step2Schema, usePostProperty, type StepComponentProps } from "./main";
 import {
   Card,
   CardContent,
@@ -33,6 +33,7 @@ import type { User } from "better-auth";
 const MAX_DESCRIPTION_LENGTH = 2000;
 
 export function Step2({ icon, label, description }: StepComponentProps) {
+  const { previousStep } = usePostProperty();
   const { user } = useLoaderData<{ user: User }>();
 
   const form = useForm<z.infer<typeof Step2Schema>>({
@@ -179,9 +180,9 @@ export function Step2({ icon, label, description }: StepComponentProps) {
         <Button
           type="button"
           variant="ghost"
-          form="step-2-form"
           size="icon"
           className="rounded-full"
+          onClick={previousStep}
         >
           <ArrowLeftIcon className="size-4" />
         </Button>

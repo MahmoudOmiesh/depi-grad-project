@@ -1,10 +1,20 @@
-import { Building2Icon, MapPinIcon } from "lucide-react";
+import {
+  BriefcaseIcon,
+  Building2Icon,
+  FileTextIcon,
+  MapPinIcon,
+} from "lucide-react";
 import { PropertyTypeSchema } from "~/lib/schemas/entities/property-type";
 import { Step1 } from "./step-1";
 import type z from "zod";
 import { createContext, useContext, useState } from "react";
 import { Step2 } from "./step-2";
-import { PropertyBaseSchema } from "~/lib/schemas/entities/property";
+import {
+  PropertyBaseSchema,
+  PropertyPurposeDetailsSchema,
+} from "~/lib/schemas/entities/property";
+import { Step3 } from "./step-3";
+import { Step4 } from "./step-4";
 
 export type StepComponentProps = Pick<Step, "icon" | "label" | "description">;
 
@@ -23,6 +33,17 @@ export const Step2Schema = PropertyBaseSchema.pick({
   ownerName: true,
   ownerPhone: true,
 });
+export const Step3Schema = PropertyBaseSchema.pick({
+  governorate: true,
+  city: true,
+  area: true,
+  amenities: true,
+});
+export const Step4Schema = PropertyPurposeDetailsSchema.and(
+  PropertyBaseSchema.pick({
+    price: true,
+  }),
+);
 
 const STEPS = [
   {
@@ -33,11 +54,25 @@ const STEPS = [
     component: Step1,
   },
   {
-    label: "no idea",
-    description: "no idea",
-    icon: <MapPinIcon className="size-4" />,
+    label: "Basic Details",
+    description: "Provide basic information about your property listing",
+    icon: <FileTextIcon className="size-4" />,
     schema: Step2Schema,
     component: Step2,
+  },
+  {
+    label: "Location",
+    description: "Provide location information about your property listing",
+    icon: <MapPinIcon className="size-4" />,
+    schema: Step3Schema,
+    component: Step3,
+  },
+  {
+    label: "Purpose",
+    description: "Select the purpose of your property listing",
+    icon: <BriefcaseIcon className="size-4" />,
+    schema: Step4Schema,
+    component: Step4,
   },
 ] as const satisfies readonly Step[];
 
@@ -71,7 +106,7 @@ export function usePostProperty() {
 }
 
 export function PostPropertyForm() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
 
   const nextStep = () => setStep(Math.min(step + 1, STEPS.length - 1));
   const previousStep = () => setStep(Math.max(step - 1, 0));

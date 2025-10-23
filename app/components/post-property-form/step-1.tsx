@@ -46,6 +46,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Step1Schema, type StepComponentProps } from "./main";
+import { ArrowRightIcon } from "lucide-react";
 
 export function Step1({ icon, label, description }: StepComponentProps) {
   const form = useForm<z.infer<typeof Step1Schema>>({
@@ -504,11 +505,14 @@ export function Step1({ icon, label, description }: StepComponentProps) {
         </form>
       </CardContent>
       <CardFooter>
-        <Field orientation="horizontal">
-          <Button type="submit" form="step-1-form" className="ml-auto">
-            Next
-          </Button>
-        </Field>
+        <Button
+          type="submit"
+          form="step-1-form"
+          size="icon"
+          className="ml-auto rounded-full"
+        >
+          <ArrowRightIcon className="size-4" />
+        </Button>
       </CardFooter>
     </Card>
   );
