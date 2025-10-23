@@ -50,13 +50,16 @@ export const PropertyBaseSchema = z.object({
   updatedAt: z.iso.datetime("Updated at is required"),
   ownerName: z
     .string("Owner name is required")
-    .min(1, "Owner name is too short"),
+    .min(5, "Owner name must be at least 5 characters"),
   ownerPhone: PhoneNumberSchema,
   propertyType: PropertyTypeSchema,
-  title: z.string("Title is required").min(1, "Title is too short"),
+  title: z
+    .string("Title is required")
+    .min(10, "Title must be at least 10 characters"),
   description: z
     .string("Description is required")
-    .min(1, "Description is too short"),
+    .min(25, "Description must be at least 25 characters")
+    .max(2000, "Description must be at most 2000 characters"),
   price: z.number("Price is required").positive("Price must be positive"),
   governorate: GovernorateSchema,
   city: z.string("City is required").min(1, "City is too short"),

@@ -2,7 +2,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import { Link, redirect } from "react-router";
 import { MaxWidthWrapper } from "~/components/max-width-wrapper";
 import { Button } from "~/components/ui/button";
-import type { Route } from "./+types/post";
+import type { Route } from "./+types/add-property";
 import { auth } from "~/lib/auth";
 import { tryCatch } from "~/lib/utils";
 import { PostPropertyForm } from "~/components/post-property-form/main";
@@ -17,6 +17,10 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (error || !data) {
     return redirect("/");
   }
+
+  return {
+    user: data.user,
+  };
 }
 
 function AddPropertyRoute() {

@@ -1,8 +1,10 @@
-import { Building2Icon } from "lucide-react";
+import { Building2Icon, MapPinIcon } from "lucide-react";
 import { PropertyTypeSchema } from "~/lib/schemas/entities/property-type";
 import { Step1 } from "./step-1";
 import type z from "zod";
 import { createContext, useContext, useState } from "react";
+import { Step2 } from "./step-2";
+import { PropertyBaseSchema } from "~/lib/schemas/entities/property";
 
 export type StepComponentProps = Pick<Step, "icon" | "label" | "description">;
 
@@ -14,13 +16,28 @@ type Step = {
   component: React.ComponentType<StepComponentProps>;
 };
 
+export const Step1Schema = PropertyTypeSchema;
+export const Step2Schema = PropertyBaseSchema.pick({
+  title: true,
+  description: true,
+  ownerName: true,
+  ownerPhone: true,
+});
+
 const STEPS = [
   {
     label: "Property Type",
     description: "Select the type of property you are posting",
     icon: <Building2Icon className="size-4" />,
-    schema: PropertyTypeSchema,
+    schema: Step1Schema,
     component: Step1,
+  },
+  {
+    label: "no idea",
+    description: "no idea",
+    icon: <MapPinIcon className="size-4" />,
+    schema: Step2Schema,
+    component: Step2,
   },
 ] as const satisfies readonly Step[];
 
@@ -54,7 +71,7 @@ export function usePostProperty() {
 }
 
 export function PostPropertyForm() {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
 
   const nextStep = () => setStep(Math.min(step + 1, STEPS.length - 1));
   const previousStep = () => setStep(Math.max(step - 1, 0));

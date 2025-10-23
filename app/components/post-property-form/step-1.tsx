@@ -1,22 +1,31 @@
-import {
-  Card,
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  CardFooter,
-} from "../ui/card";
-import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { StepComponentProps } from "./main";
+import { Controller, useForm } from "react-hook-form";
+import type z from "zod";
 import {
   ApartmentSubtypes,
   CommercialSubtypes,
   LandSubtypes,
   PropertyTypeNames,
-  PropertyTypeSchema,
   VillaSubtypes,
 } from "~/lib/schemas/entities/property-type";
+import {
+  ApartmentSubtypesMapping,
+  CommercialSubtypesMapping,
+  LandSubtypesMapping,
+  PropertyTypeNamesMapping,
+  VillaSubtypesMapping,
+} from "~/lib/schemas/mappings/property-type";
+import { cn } from "~/lib/utils";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import {
   Field,
   FieldContent,
@@ -27,6 +36,8 @@ import {
   FieldSet,
   FieldTitle,
 } from "../ui/field";
+import { Input } from "../ui/input";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -34,23 +45,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import type z from "zod";
-import {
-  ApartmentSubtypesMapping,
-  CommercialSubtypesMapping,
-  LandSubtypesMapping,
-  PropertyTypeNamesMapping,
-  VillaSubtypesMapping,
-} from "~/lib/schemas/mappings/property-type";
-import { Input } from "../ui/input";
-import { Badge } from "../ui/badge";
-import { cn } from "~/lib/utils";
-import { Button } from "../ui/button";
+import { Step1Schema, type StepComponentProps } from "./main";
 
 export function Step1({ icon, label, description }: StepComponentProps) {
-  const form = useForm<z.infer<typeof PropertyTypeSchema>>({
-    resolver: zodResolver(PropertyTypeSchema),
+  const form = useForm<z.infer<typeof Step1Schema>>({
+    resolver: zodResolver(Step1Schema),
     defaultValues: {
       name: "APARTMENT",
       apartmentDetails: {
@@ -61,7 +60,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
 
   const selectedPropertyType = form.watch("name");
 
-  function handleSubmit(data: z.infer<typeof PropertyTypeSchema>) {
+  function handleSubmit(data: z.infer<typeof Step1Schema>) {
     console.log(data);
   }
 

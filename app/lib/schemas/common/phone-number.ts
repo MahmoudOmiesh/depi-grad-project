@@ -1,15 +1,15 @@
 import z from "zod";
 import { parsePhoneNumberWithError } from "libphonenumber-js";
 
-export const PhoneNumberSchema = z
-  .string("Phone number is required")
-  .min(1, "Phone number is too short")
-  .refine(
-    (val) =>
-      parsePhoneNumberWithError(val, {
+export const PhoneNumberSchema = z.string("Phone number is required").refine(
+  (val) => {
+    try {
+      return parsePhoneNumberWithError(val, {
         defaultCountry: "EG",
-      }).isValid(),
-    {
-      message: "Phone number is invalid",
+      }).isValid();
+    } catch {
+      return false;
     }
-  );
+  },
+  { message: "Phone number is invalid" },
+);
