@@ -1,4 +1,9 @@
-import type { Amenity } from "@prisma/client";
+import type {
+  Amenity,
+  PaymentMethod,
+  PropertyPurpose,
+  RentFrequency,
+} from "@prisma/client";
 import type { PropertyTypeName } from "../entities/property-type";
 
 export const AmenitiesPerPropertyType = {
@@ -56,3 +61,21 @@ export const AmenitiesMapping = {
   AIR_CONDITIONING: "Air Conditioning",
   STORAGE: "Storage",
 } as const satisfies Record<Amenity, string>;
+
+export const PropertyPurposeNamesMapping = {
+  SELL: "Sell",
+  RENT: "Rent",
+} as const satisfies Record<PropertyPurpose, string>;
+
+export const PaymentMethodNamesMapping = {
+  CASH: "Cash",
+  INSTALLMENT: "Installment",
+  BOTH: "Both",
+} as const satisfies Record<PaymentMethod, string>;
+
+export const RentFrequencyNamesMapping = {
+  DAILY: "Daily",
+  WEEKLY: "Weekly",
+  MONTHLY: "Monthly",
+  YEARLY: "Yearly",
+} as const satisfies Record<RentFrequency, string>;

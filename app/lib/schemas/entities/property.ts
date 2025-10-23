@@ -16,9 +16,14 @@ export const GovernorateSchema = z.enum(PrismaGovernorate, {
 export const PropertyAmenitySchema = z.enum(PrismaAmenity);
 export const PropertyPurposeSchema = z.enum(PrismaPropertyPurpose);
 export const PaymentMethodSchema = z.enum(PrismaPaymentMethod);
-export const RentFrequencySchema = z.enum(PrismaRentFrequency);
+export const RentFrequencySchema = z.enum(PrismaRentFrequency, {
+  message: "Please select a rent frequency",
+});
 
 export const Governorates = Object.values(PrismaGovernorate);
+export const PropertyPurposes = Object.values(PrismaPropertyPurpose);
+export const PaymentMethods = Object.values(PrismaPaymentMethod);
+export const RentFrequencies = Object.values(PrismaRentFrequency);
 
 export const PropertySellDetailsSchema = z.discriminatedUnion("paymentMethod", [
   z.object({

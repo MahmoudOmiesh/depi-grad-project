@@ -106,7 +106,7 @@ export function usePostProperty() {
 }
 
 export function PostPropertyForm() {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(3);
 
   const nextStep = () => setStep(Math.min(step + 1, STEPS.length - 1));
   const previousStep = () => setStep(Math.max(step - 1, 0));
