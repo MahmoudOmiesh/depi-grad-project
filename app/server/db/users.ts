@@ -107,7 +107,7 @@ export const _users = {
               set: property.amenities,
             },
             media: {
-              connect: property.mediaIds.map((mediaId) => ({ id: mediaId })),
+              connect: property.mediaData.map((media) => ({ id: media.id })),
             },
           },
           select: {

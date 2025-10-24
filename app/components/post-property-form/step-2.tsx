@@ -33,21 +33,27 @@ import type { User } from "better-auth";
 const MAX_DESCRIPTION_LENGTH = 2000;
 
 export function Step2({ icon, label, description }: StepComponentProps) {
-  const { previousStep } = usePostProperty();
+  const { previousStep, nextStep, submittedData, setSubmittedData } =
+    usePostProperty();
   const { user } = useLoaderData<{ user: User }>();
+
+  const defaultValues = (submittedData.get(2) as z.infer<
+    typeof Step2Schema
+  >) ?? {
+    title: "",
+    description: "",
+    ownerName: user.name,
+    ownerPhone: "",
+  };
 
   const form = useForm<z.infer<typeof Step2Schema>>({
     resolver: zodResolver(Step2Schema),
-    defaultValues: {
-      title: "",
-      description: "",
-      ownerName: user.name,
-      ownerPhone: "",
-    },
+    defaultValues,
   });
 
   function handleSubmit(data: z.infer<typeof Step2Schema>) {
-    console.log(data);
+    setSubmittedData(2, data);
+    nextStep();
   }
 
   return (

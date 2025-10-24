@@ -47,23 +47,28 @@ import {
   SelectValue,
 } from "../ui/select";
 export function Step4({ icon, label, description }: StepComponentProps) {
-  const { previousStep } = usePostProperty();
+  const { previousStep, nextStep, submittedData, setSubmittedData } =
+    usePostProperty();
 
+  const defaultValues = (submittedData.get(4) as z.infer<
+    typeof Step4Schema
+  >) ?? {
+    purpose: "SELL",
+    sellDetails: {
+      paymentMethod: "CASH",
+    },
+  };
   const form = useForm<z.infer<typeof Step4Schema>>({
     resolver: zodResolver(Step4Schema),
-    defaultValues: {
-      purpose: "SELL",
-      sellDetails: {
-        paymentMethod: "CASH",
-      },
-    },
+    defaultValues,
   });
 
   const purpose = form.watch("purpose");
   const sellPaymentMethod = form.watch("sellDetails.paymentMethod");
 
   function handleSubmit(data: z.infer<typeof Step4Schema>) {
-    console.log(data);
+    setSubmittedData(4, data);
+    nextStep();
   }
 
   return (

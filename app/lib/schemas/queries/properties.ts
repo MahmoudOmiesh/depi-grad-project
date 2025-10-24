@@ -35,6 +35,20 @@ export const PropertiesGetPageResponseSchema = z.object({
   nextCursor: z.string().optional(),
 });
 
+export const PropertyMediaInsertSchema = z.object({
+  mediaData: z
+    .array(
+      z.object({
+        id: z
+          .number("Media ID is required")
+          .positive("Media ID must be positive"),
+        url: z.url("URL is invalid").min(1, "URL is too short"),
+        name: z.string("Name is required").min(1, "Name is too short"),
+      }),
+    )
+    .min(1, "You must upload at least one image"),
+});
+
 export const PropertyInsertSchema = PropertyBaseSchema.omit({
   id: true,
   slug: true,
@@ -44,17 +58,7 @@ export const PropertyInsertSchema = PropertyBaseSchema.omit({
   media: true,
 })
   .and(PropertyPurposeDetailsSchema)
-  .and(
-    z.object({
-      mediaIds: z
-        .array(
-          z
-            .number("Media ID is required")
-            .positive("Media ID must be positive"),
-        )
-        .min(1, "Media IDs must be at least 1"),
-    }),
-  );
+  .and(PropertyMediaInsertSchema);
 
 export const PropertyUpdateSchema = PropertyInsertSchema.and(
   z.object({

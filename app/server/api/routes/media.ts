@@ -21,6 +21,7 @@ export const mediaRoute = new Hono()
       const { data, error } = await tryCatch(s3GetPresignedUrl(body));
 
       if (error) {
+        console.error(error);
         return c.json({ error: "Failed to get presigned URL" }, 500);
       }
 
@@ -41,6 +42,14 @@ export const mediaRoute = new Hono()
         return c.json({ error: "Failed to insert media" }, 500);
       }
 
-      return c.json(data, 200);
+      return c.json(
+        {
+          mediaId: data.id,
+          url: body.url,
+          name: body.name,
+          mimeType: body.mimeType,
+        },
+        200,
+      );
     },
   );

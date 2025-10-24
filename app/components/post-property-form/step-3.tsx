@@ -1,6 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { Step3Schema, usePostProperty, type StepComponentProps } from "./main";
+import {
+  type Step1Schema,
+  Step3Schema,
+  usePostProperty,
+  type StepComponentProps,
+} from "./main";
 import {
   Card,
   CardContent,
@@ -37,18 +42,27 @@ import {
 import { Badge } from "../ui/badge";
 
 export function Step3({ icon, label, description }: StepComponentProps) {
-  const { previousStep } = usePostProperty();
+  const { previousStep, nextStep, submittedData, setSubmittedData } =
+    usePostProperty();
+
+  const defaultValues = (submittedData.get(3) as z.infer<
+    typeof Step3Schema
+  >) ?? {
+    city: "",
+    amenities: [],
+  };
+
+  const propertyType = (submittedData.get(1) as z.infer<typeof Step1Schema>)
+    ?.propertyType.name;
 
   const form = useForm<z.infer<typeof Step3Schema>>({
     resolver: zodResolver(Step3Schema),
-    defaultValues: {
-      city: "",
-      amenities: [],
-    },
+    defaultValues,
   });
 
   function handleSubmit(data: z.infer<typeof Step3Schema>) {
-    console.log(data);
+    setSubmittedData(3, data);
+    nextStep();
   }
   return (
     <Card>
@@ -162,26 +176,28 @@ export function Step3({ icon, label, description }: StepComponentProps) {
                         orientation="horizontal"
                         className="flex-wrap gap-2"
                       >
-                        {AmenitiesPerPropertyType.APARTMENT.map((amenity) => (
-                          <Badge
-                            key={amenity}
-                            className="cursor-pointer border px-3 py-1.5 transition-none"
-                            variant={
-                              field.value.includes(amenity)
-                                ? "default"
-                                : "outline"
-                            }
-                            onClick={() =>
-                              field.onChange(
+                        {AmenitiesPerPropertyType[propertyType].map(
+                          (amenity) => (
+                            <Badge
+                              key={amenity}
+                              className="cursor-pointer border px-3 py-1.5 transition-none"
+                              variant={
                                 field.value.includes(amenity)
-                                  ? field.value.filter((a) => a !== amenity)
-                                  : [...field.value, amenity],
-                              )
-                            }
-                          >
-                            {AmenitiesMapping[amenity]}
-                          </Badge>
-                        ))}
+                                  ? "default"
+                                  : "outline"
+                              }
+                              onClick={() =>
+                                field.onChange(
+                                  field.value.includes(amenity)
+                                    ? field.value.filter((a) => a !== amenity)
+                                    : [...field.value, amenity],
+                                )
+                              }
+                            >
+                              {AmenitiesMapping[amenity]}
+                            </Badge>
+                          ),
+                        )}
                       </Field>
                     </FieldGroup>
                     {fieldState.invalid && (

@@ -45,24 +45,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Step1Schema, type StepComponentProps } from "./main";
+import { Step1Schema, usePostProperty, type StepComponentProps } from "./main";
 import { ArrowRightIcon } from "lucide-react";
 
 export function Step1({ icon, label, description }: StepComponentProps) {
-  const form = useForm<z.infer<typeof Step1Schema>>({
-    resolver: zodResolver(Step1Schema),
-    defaultValues: {
+  const { nextStep, submittedData, setSubmittedData } = usePostProperty();
+
+  const defaultValues = (submittedData.get(1) as z.infer<
+    typeof Step1Schema
+  >) ?? {
+    propertyType: {
       name: "APARTMENT",
       apartmentDetails: {
         furnished: true,
       },
     },
+  };
+
+  const form = useForm<z.infer<typeof Step1Schema>>({
+    resolver: zodResolver(Step1Schema),
+    defaultValues,
   });
 
-  const selectedPropertyType = form.watch("name");
+  const selectedPropertyType = form.watch("propertyType.name");
 
   function handleSubmit(data: z.infer<typeof Step1Schema>) {
-    console.log(data);
+    setSubmittedData(1, data);
+    nextStep();
   }
 
   return (
@@ -80,7 +89,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
         <form id="step-1-form" onSubmit={form.handleSubmit(handleSubmit)}>
           <FieldGroup className="mb-8">
             <Controller
-              name="name"
+              name="propertyType.name"
               control={form.control}
               render={({ field, fieldState }) => (
                 <FieldSet data-invalid={fieldState.invalid}>
@@ -129,7 +138,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
             <div className="space-y-4">
               <FieldGroup>
                 <Controller
-                  name="apartmentDetails.subtype"
+                  name="propertyType.apartmentDetails.subtype"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
@@ -168,7 +177,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
 
               <FieldGroup>
                 <Controller
-                  name="apartmentDetails.bedrooms"
+                  name="propertyType.apartmentDetails.bedrooms"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
@@ -194,7 +203,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
 
               <FieldGroup>
                 <Controller
-                  name="apartmentDetails.bathrooms"
+                  name="propertyType.apartmentDetails.bathrooms"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
@@ -220,7 +229,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
 
               <FieldGroup>
                 <Controller
-                  name="apartmentDetails.level"
+                  name="propertyType.apartmentDetails.level"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
@@ -246,7 +255,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
 
               <FieldGroup>
                 <Controller
-                  name="apartmentDetails.furnished"
+                  name="propertyType.apartmentDetails.furnished"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field
@@ -289,7 +298,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
             <div className="space-y-4">
               <FieldGroup>
                 <Controller
-                  name="villaDetails.subtype"
+                  name="propertyType.villaDetails.subtype"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
@@ -328,7 +337,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
 
               <FieldGroup>
                 <Controller
-                  name="villaDetails.bedrooms"
+                  name="propertyType.villaDetails.bedrooms"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
@@ -354,7 +363,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
 
               <FieldGroup>
                 <Controller
-                  name="villaDetails.bathrooms"
+                  name="propertyType.villaDetails.bathrooms"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
@@ -380,7 +389,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
 
               <FieldGroup>
                 <Controller
-                  name="villaDetails.furnished"
+                  name="propertyType.villaDetails.furnished"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field
@@ -422,7 +431,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
             <div>
               <FieldGroup>
                 <Controller
-                  name="commercialDetails.subtype"
+                  name="propertyType.commercialDetails.subtype"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
@@ -464,7 +473,7 @@ export function Step1({ icon, label, description }: StepComponentProps) {
             <div>
               <FieldGroup>
                 <Controller
-                  name="landDetails.subtype"
+                  name="propertyType.landDetails.subtype"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>

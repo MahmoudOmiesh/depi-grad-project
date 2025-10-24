@@ -2,11 +2,12 @@ import {
   BriefcaseIcon,
   Building2Icon,
   FileTextIcon,
+  ImageIcon,
   MapPinIcon,
 } from "lucide-react";
 import { PropertyTypeSchema } from "~/lib/schemas/entities/property-type";
 import { Step1 } from "./step-1";
-import type z from "zod";
+import z from "zod";
 import { createContext, useContext, useState } from "react";
 import { Step2 } from "./step-2";
 import {
@@ -15,6 +16,8 @@ import {
 } from "~/lib/schemas/entities/property";
 import { Step3 } from "./step-3";
 import { Step4 } from "./step-4";
+import { PropertyMediaInsertSchema } from "~/lib/schemas/queries/properties";
+import { Step5 } from "./step-5";
 
 export type StepComponentProps = Pick<Step, "icon" | "label" | "description">;
 
@@ -26,7 +29,9 @@ type Step = {
   component: React.ComponentType<StepComponentProps>;
 };
 
-export const Step1Schema = PropertyTypeSchema;
+export const Step1Schema = z.object({
+  propertyType: PropertyTypeSchema,
+});
 export const Step2Schema = PropertyBaseSchema.pick({
   title: true,
   description: true,
@@ -44,6 +49,7 @@ export const Step4Schema = PropertyPurposeDetailsSchema.and(
     price: true,
   }),
 );
+export const Step5Schema = PropertyMediaInsertSchema;
 
 const STEPS = [
   {
@@ -74,6 +80,13 @@ const STEPS = [
     schema: Step4Schema,
     component: Step4,
   },
+  {
+    label: "Images",
+    description: "Upload images of your property listing",
+    icon: <ImageIcon className="size-4" />,
+    schema: Step5Schema,
+    component: Step5,
+  },
 ] as const satisfies readonly Step[];
 
 type InferredSchemas = {
@@ -88,7 +101,7 @@ interface PostPropertyContext {
   nextStep: () => void;
   previousStep: () => void;
   submittedData: Map<number, AnyStepSchema>;
-  setSubmittedData(step: number, data: AnyStepSchema): void;
+  setSubmittedData(this: void, step: number, data: AnyStepSchema): void;
 }
 
 const submittedData = new Map<number, AnyStepSchema>();
@@ -106,7 +119,7 @@ export function usePostProperty() {
 }
 
 export function PostPropertyForm() {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(0);
 
   const nextStep = () => setStep(Math.min(step + 1, STEPS.length - 1));
   const previousStep = () => setStep(Math.max(step - 1, 0));
