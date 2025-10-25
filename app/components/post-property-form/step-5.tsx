@@ -50,10 +50,7 @@ export function Step5({ icon, label, description }: StepComponentProps) {
 
       const propertyResponse = await response.json();
 
-      if ("error" in propertyResponse) {
-        throw new Error(propertyResponse.error);
-      }
-      return propertyResponse.id;
+      return propertyResponse;
     },
 
     onSuccess: () => {
@@ -73,8 +70,11 @@ export function Step5({ icon, label, description }: StepComponentProps) {
     setIsUploading(true);
 
     try {
-      for (const file of Array.from(files)) {
-        await uploadImage(file);
+      const initialLength = form.getValues("mediaData").length;
+      const filesArray = Array.from(files);
+
+      for (let i = 0; i < filesArray.length; i++) {
+        await uploadImage(filesArray[i], initialLength + i);
       }
       toast.success("Images uploaded successfully!");
     } catch (error) {
@@ -87,7 +87,7 @@ export function Step5({ icon, label, description }: StepComponentProps) {
     }
   }
 
-  async function uploadImage(file: File) {
+  async function uploadImage(file: File, order: number) {
     // Generate unique file ID
     const fileId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
@@ -105,7 +105,7 @@ export function Step5({ icon, label, description }: StepComponentProps) {
       throw new Error("Failed to get presigned URL");
     }
 
-    const presignedData = await presignedResponse.json();
+    const { data: presignedData } = await presignedResponse.json();
 
     // Step 2: Upload to S3 using presigned URL
     const uploadResponse = await fetch(presignedData.url, {
@@ -126,7 +126,7 @@ export function Step5({ icon, label, description }: StepComponentProps) {
         name: presignedData.name,
         url: presignedData.accessUrl,
         mimeType: presignedData.mimeType,
-        order: mediaData.length,
+        order: order,
       },
     });
 
@@ -134,7 +134,7 @@ export function Step5({ icon, label, description }: StepComponentProps) {
       throw new Error("Failed to create media entry");
     }
 
-    const mediaResponseData = await mediaResponse.json();
+    const { data: mediaResponseData } = await mediaResponse.json();
 
     // Step 4: Add to form state
     const currentMediaData = form.getValues("mediaData");

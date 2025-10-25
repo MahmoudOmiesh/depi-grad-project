@@ -22,10 +22,13 @@ export const mediaRoute = new Hono()
 
       if (error) {
         console.error(error);
-        return c.json({ error: "Failed to get presigned URL" }, 500);
+        return c.json(
+          { ok: false as const, error: "Failed to get presigned URL" },
+          500,
+        );
       }
 
-      return c.json(data, 200);
+      return c.json({ ok: true as const, data }, 200);
     },
   )
 
@@ -39,15 +42,21 @@ export const mediaRoute = new Hono()
       const { data, error } = await tryCatch(db.media.mutations.insert(body));
 
       if (error) {
-        return c.json({ error: "Failed to insert media" }, 500);
+        return c.json(
+          { ok: false as const, error: "Failed to insert media" },
+          500,
+        );
       }
 
       return c.json(
         {
-          mediaId: data.id,
-          url: body.url,
-          name: body.name,
-          mimeType: body.mimeType,
+          ok: true as const,
+          data: {
+            mediaId: data.id,
+            url: body.url,
+            name: body.name,
+            mimeType: body.mimeType,
+          },
         },
         200,
       );

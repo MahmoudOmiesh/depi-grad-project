@@ -28,10 +28,13 @@ export const usersRoute = new Hono()
       );
 
       if (error) {
-        return c.json({ error: "Failed to get properties" }, 500);
+        return c.json(
+          { ok: false as const, error: "Failed to get properties" },
+          500,
+        );
       }
 
-      return c.json(data, 200);
+      return c.json({ ok: true as const, data }, 200);
     },
   )
 
@@ -48,10 +51,13 @@ export const usersRoute = new Hono()
       );
 
       if (error) {
-        return c.json({ error: "Failed to create property" }, 500);
+        return c.json(
+          { ok: false as const, error: "Failed to create property" },
+          500,
+        );
       }
 
-      return c.json(data, 200);
+      return c.json({ ok: true as const, data }, 200);
     },
   )
 
@@ -74,12 +80,18 @@ export const usersRoute = new Hono()
           "code" in error &&
           error.code === "P2025"
         ) {
-          return c.json({ error: "Property not found" }, 404);
+          return c.json(
+            { ok: false as const, error: "Property not found" },
+            404,
+          );
         }
 
-        return c.json({ error: "Failed to delete property" }, 500);
+        return c.json(
+          { ok: false as const, error: "Failed to delete property" },
+          500,
+        );
       }
 
-      return c.json(data, 200);
+      return c.json({ ok: true as const, data }, 200);
     },
   );

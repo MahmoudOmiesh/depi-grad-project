@@ -44,12 +44,11 @@ declare module "@tanstack/react-query" {
 export const queryClient = new QueryClient({
   mutationCache: new MutationCache({
     onSuccess: async (_data, _variables, _context, mutation) => {
-      //should probably add this back
-      // if (_data && !(_data as { ok: boolean }).ok) {
-      //   throw new Error(
-      //     (_data as { error: { message: string } }).error.message,
-      //   );
-      // }
+      if (_data && !(_data as { ok: boolean }).ok) {
+        throw new Error(
+          (_data as { error: { message: string } }).error.message,
+        );
+      }
 
       const invalidate = mutation.meta?.invalidateQueries;
 

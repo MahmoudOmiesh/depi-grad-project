@@ -23,10 +23,13 @@ export const propertiesRoute = new Hono()
       );
 
       if (error) {
-        return c.json({ error: "Failed to get properties" }, 500);
+        return c.json(
+          { ok: false as const, error: "Failed to get properties" },
+          500,
+        );
       }
 
-      return c.json(data, 200);
+      return c.json({ ok: true as const, data }, 200);
     },
   )
   .get(
@@ -38,13 +41,16 @@ export const propertiesRoute = new Hono()
       const { data, error } = await tryCatch(db.properties.queries.getById(id));
 
       if (error) {
-        return c.json({ error: "Failed to get property" }, 500);
+        return c.json(
+          { ok: false as const, error: "Failed to get property" },
+          500,
+        );
       }
 
       if (!data) {
-        return c.json({ error: "Property not found" }, 404);
+        return c.json({ ok: false as const, error: "Property not found" }, 404);
       }
 
-      return c.json(data, 200);
+      return c.json({ ok: true as const, data }, 200);
     },
   );

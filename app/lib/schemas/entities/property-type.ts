@@ -7,7 +7,7 @@ import {
 } from "@prisma/client";
 import z from "zod";
 
-export const ProperyTypeNameSchema = z.enum(PrismaPropertyTypeName, {
+export const PropertyTypeNameSchema = z.enum(PrismaPropertyTypeName, {
   error: "Please select a property type",
 });
 export const ApartmentSubtypeSchema = z.enum(ApartmentSubtype, {
@@ -82,7 +82,7 @@ export const PropertyTypeSchema = z.discriminatedUnion("name", [
   }),
 ]);
 
-export type PropertyTypeName = z.infer<typeof ProperyTypeNameSchema>;
+export type PropertyTypeName = z.infer<typeof PropertyTypeNameSchema>;
 
 export type ApartmentDetails = z.infer<typeof ApartmentDetailsSchema>;
 export type VillaDetails = z.infer<typeof VillaDetailsSchema>;
