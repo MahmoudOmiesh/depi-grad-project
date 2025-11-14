@@ -1,5 +1,5 @@
 import { describeRoute, resolver } from "hono-openapi";
-import z from "zod";
+import * as z from "zod";
 import { UserGetPropertiesPageResponseSchema } from "~/lib/schemas/queries/users";
 
 export const _users = {

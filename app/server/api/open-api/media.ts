@@ -1,5 +1,5 @@
 import { describeRoute, resolver } from "hono-openapi";
-import z from "zod";
+import * as z from "zod";
 import { PresignedURLResponseSchema } from "~/lib/schemas/queries/media";
 
 export const _media = {

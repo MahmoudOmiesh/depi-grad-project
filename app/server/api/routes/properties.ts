@@ -5,7 +5,7 @@ import { db } from "~/server/db";
 import { tryCatch } from "~/lib/utils";
 import { paginate } from "../paginate";
 import { docs } from "../open-api";
-import z from "zod";
+import * as z from "zod";
 
 export const propertiesRoute = new Hono()
   .get(

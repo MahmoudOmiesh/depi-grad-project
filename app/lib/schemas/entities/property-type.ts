@@ -5,7 +5,7 @@ import {
   PropertyTypeName as PrismaPropertyTypeName,
   VillaSubtype,
 } from "@prisma/client";
-import z from "zod";
+import * as z from "zod";
 
 export const PropertyTypeNameSchema = z.enum(PrismaPropertyTypeName, {
   error: "Please select a property type",

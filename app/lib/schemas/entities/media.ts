@@ -1,4 +1,4 @@
-import z from "zod";
+import * as z from "zod";
 
 export const MediaSchema = z.object({
   id: z.number("ID is required").positive("ID must be positive"),

@@ -1,4 +1,4 @@
-import z from "zod";
+import * as z from "zod";
 
 export const stringOrArray = <T extends z.ZodTypeAny>(schema: T) => {
   return z

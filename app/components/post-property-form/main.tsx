@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { PropertyTypeSchema } from "~/lib/schemas/entities/property-type";
 import { Step1 } from "./step-1";
-import z from "zod";
+import * as z from "zod";
 import { createContext, useContext, useState } from "react";
 import { Step2 } from "./step-2";
 import {

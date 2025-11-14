@@ -1,4 +1,4 @@
-import z from "zod";
+import * as z from "zod";
 import { PhoneNumberSchema } from "../common/phone-number";
 import { PropertyTypeSchema } from "./property-type";
 import {

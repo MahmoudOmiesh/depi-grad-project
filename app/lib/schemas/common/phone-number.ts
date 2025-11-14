@@ -1,4 +1,4 @@
-import z from "zod";
+import * as z from "zod";
 import { parsePhoneNumberWithError } from "libphonenumber-js";
 
 export const PhoneNumberSchema = z.string("Phone number is required").refine(

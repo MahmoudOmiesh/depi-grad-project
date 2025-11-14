@@ -6,7 +6,7 @@ import { docs } from "../open-api";
 import { tryCatch } from "~/lib/utils";
 import { paginate } from "../paginate";
 import { db } from "~/server/db";
-import z from "zod";
+import * as z from "zod";
 import { PropertyInsertSchema } from "~/lib/schemas/queries/properties";
 
 export const usersRoute = new Hono()

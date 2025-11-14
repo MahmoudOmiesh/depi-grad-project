@@ -1,4 +1,4 @@
-import z from "zod";
+import * as z from "zod";
 import { MediaSchema } from "../entities/media";
 
 export const PresignedURLInsertSchema = z.object({
