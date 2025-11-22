@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { docs } from "../open-api";
+import { _media } from "../open-api/media";
 import { validator } from "hono-openapi";
 import {
   MediaInsertSchema,
@@ -15,7 +15,7 @@ export const mediaRoute = new Hono()
   .post(
     "/presigned-url",
     validator("json", PresignedURLInsertSchema),
-    docs.media.getPresignedUrl,
+    _media.getPresignedUrl,
     async (c) => {
       const body = c.req.valid("json");
       const { data, error } = await tryCatch(s3GetPresignedUrl(body));
@@ -32,33 +32,28 @@ export const mediaRoute = new Hono()
     },
   )
 
-  .post(
-    "/",
-    docs.media.insert,
-    validator("json", MediaInsertSchema),
-    async (c) => {
-      const body = c.req.valid("json");
+  .post("/", _media.insert, validator("json", MediaInsertSchema), async (c) => {
+    const body = c.req.valid("json");
 
-      const { data, error } = await tryCatch(db.media.mutations.insert(body));
+    const { data, error } = await tryCatch(db.media.mutations.insert(body));
 
-      if (error) {
-        return c.json(
-          { ok: false as const, error: "Failed to insert media" },
-          500,
-        );
-      }
-
+    if (error) {
       return c.json(
-        {
-          ok: true as const,
-          data: {
-            mediaId: data.id,
-            url: body.url,
-            name: body.name,
-            mimeType: body.mimeType,
-          },
-        },
-        200,
+        { ok: false as const, error: "Failed to insert media" },
+        500,
       );
-    },
-  );
+    }
+
+    return c.json(
+      {
+        ok: true as const,
+        data: {
+          mediaId: data.id,
+          url: body.url,
+          name: body.name,
+          mimeType: body.mimeType,
+        },
+      },
+      200,
+    );
+  });

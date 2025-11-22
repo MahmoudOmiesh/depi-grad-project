@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { getUser } from "../middleware/auth";
 import { UserGetPropertiesPageSchema } from "~/lib/schemas/queries/users";
 import { validator } from "hono-openapi";
-import { docs } from "../open-api";
+import { _users } from "../open-api/users";
 import { tryCatch } from "~/lib/utils";
 import { paginate } from "../paginate";
 import { db } from "~/server/db";
@@ -13,7 +13,7 @@ export const usersRoute = new Hono()
   .use(getUser)
   .get(
     "/properties",
-    docs.users.getProperties,
+    _users.getProperties,
     validator("query", UserGetPropertiesPageSchema),
     async (c) => {
       const user = c.get("user");
@@ -40,7 +40,7 @@ export const usersRoute = new Hono()
 
   .post(
     "/properties",
-    docs.users.createProperty,
+    _users.createProperty,
     validator("json", PropertyInsertSchema),
     async (c) => {
       const user = c.get("user");
@@ -63,7 +63,7 @@ export const usersRoute = new Hono()
 
   .delete(
     "/properties/:id",
-    docs.users.deleteProperty,
+    _users.deleteProperty,
     validator("param", z.object({ id: z.coerce.number() })),
     async (c) => {
       const user = c.get("user");

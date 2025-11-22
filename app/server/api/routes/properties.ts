@@ -4,13 +4,13 @@ import { PropertiesGetPageSchema } from "~/lib/schemas/queries/properties";
 import { db } from "~/server/db";
 import { tryCatch } from "~/lib/utils";
 import { paginate } from "../paginate";
-import { docs } from "../open-api";
+import { _properties } from "../open-api/properties";
 import * as z from "zod";
 
 export const propertiesRoute = new Hono()
   .get(
     "/",
-    docs.properties.getPage,
+    _properties.getPage,
     validator("query", PropertiesGetPageSchema),
     async (c) => {
       const query = c.req.valid("query");
@@ -34,7 +34,7 @@ export const propertiesRoute = new Hono()
   )
   .get(
     "/:id",
-    docs.properties.getById,
+    _properties.getById,
     validator("param", z.object({ id: z.coerce.number() })),
     async (c) => {
       const id = c.req.valid("param").id;
