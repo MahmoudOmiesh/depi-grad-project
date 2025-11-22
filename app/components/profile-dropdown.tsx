@@ -1,6 +1,13 @@
 "use client";
 
-import { LogOutIcon, Monitor, Moon, PaletteIcon, Sun } from "lucide-react";
+import {
+  List,
+  LogOutIcon,
+  Monitor,
+  Moon,
+  PaletteIcon,
+  Sun,
+} from "lucide-react";
 import { AvatarWithFallback } from "./avatar-with-fallback";
 import {
   DropdownMenu,
@@ -33,7 +40,7 @@ export function ProfileDropdown({
 
   return (
     <DropdownMenu modal={false}>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className="cursor-pointer">
         <AvatarWithFallback src={photoUrl} className={className} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -63,6 +70,10 @@ export function ProfileDropdown({
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
+          <DropdownMenuItem onClick={() => navigate("/my-properties")}>
+            <List className="size-4" />
+            My Properties
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

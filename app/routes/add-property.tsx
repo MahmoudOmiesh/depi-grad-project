@@ -15,7 +15,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   );
 
   if (error || !data) {
-    return redirect("/");
+    return redirect("/register");
   }
 
   return {
